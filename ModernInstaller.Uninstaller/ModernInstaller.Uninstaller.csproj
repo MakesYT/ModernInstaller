@@ -11,37 +11,28 @@
         <PublishAotSingleFile>true</PublishAotSingleFile>
         <SupportedOSPlatformVersion>5.1</SupportedOSPlatformVersion>
         <TargetPlatformMinVersion>5.1</TargetPlatformMinVersion>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
             
     </PropertyGroup>
     <ItemGroup>
         <Folder Include="Models\"/>
-        <Folder Include="Natives\**"/>
         <AvaloniaResource Include="Assets\HarmonyOS_Sans_SC_Regular.ttf"/>
         <AvaloniaResource Include="Assets\Installer\**"/>
-        <Folder Include="native\x86\" />
     </ItemGroup>
     <ItemGroup Label="AotSingleFile" Condition="'$(RuntimeIdentifier)' == 'win-x64'">
         <DirectPInvoke Include="libHarfBuzzSharp" />
-        <NativeLibrary Include="Natives/Windows-x64/libHarfBuzzSharp.lib" />
-
+        <NativeLibrary Include="..\Natives\Windows-x64\libHarfBuzzSharp.lib" />
         <DirectPInvoke Include="libSkiaSharp" />
-        <NativeLibrary Include="Natives/Windows-x64/libSkiaSharp.lib" />
-
-       
-
+        <NativeLibrary Include="..\Natives\Windows-x64\libSkiaSharp.lib" />
         <Content Update="*.dll" CopyToPublishDirectory="Never" />
     </ItemGroup>
     <ItemGroup Label="AotSingleFile" Condition="'$(RuntimeIdentifier)' == 'win-x86'">
         <DirectPInvoke Include="libHarfBuzzSharp" />
-        <NativeLibrary Include="Natives/Windows-x86/libHarfBuzzSharp.lib" />
-
+        <NativeLibrary Include="..\Natives\Windows-x86\libHarfBuzzSharp.lib" />
         <DirectPInvoke Include="libSkiaSharp" />
-        <NativeLibrary Include="Natives/Windows-x86/libSkiaSharp.lib" />
-
-      
-
+        <NativeLibrary Include="..\Natives\Windows-x86\libSkiaSharp.lib" />
         <Content Update="*.dll" CopyToPublishDirectory="Never" />
     </ItemGroup>
     <ItemGroup>
@@ -54,7 +45,8 @@
         <PackageReference Include="Irihi.Ursa" Version="1.2.0" />
         <PackageReference Include="Irihi.Ursa.Themes.Semi" Version="1.2.0" />
         <PackageReference Include="Semi.Avalonia" Version="11.1.0.3" />
-        <PackageReference Include="YY-Thunks" Version="1.1.2" />
+        <PackageReference Include="Vanara.Windows.Shell" Version="4.0.3" />
+        <PackageReference Include="YY-Thunks" Version="1.1.3-Beta1" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="..\Assets\ApplicationUUID">

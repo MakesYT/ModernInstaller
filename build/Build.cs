@@ -31,7 +31,7 @@ class Build : NukeBuild
                 .SetProject("ModernInstaller.Uninstaller")
                 .SetOutput(RootDirectory / "Publish" )
                 .SetFramework("net9.0-windows")
-                .SetRuntime("win-x86")
+                .SetRuntime("win-x64")
                 .SetConfiguration("Release")
                 .SetSelfContained(true)
                 .SetPublishSingleFile(true)
@@ -42,7 +42,7 @@ class Build : NukeBuild
         .DependsOn(BuildNativeUninstaller)
         .Executes(() =>
         {
-            File.Copy(RootDirectory / "Publish" / "ModernInstaller.Uninstaller.exe",RootDirectory / "Assets" / "ModernInstaller.Uninstaller.exe");
+            File.Copy(RootDirectory / "Publish" / "ModernInstaller.Uninstaller.exe",RootDirectory / "Assets" / "ModernInstaller.Uninstaller.exe",true);
         });
     Target BuildNativeInstaller => _ => _
         .DependsOn(PrepareBuildNativeInstaller)

@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -14,6 +15,7 @@ using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using Vanara.PInvoke;
 
 namespace ModernInstaller.ViewModels;
 
@@ -36,24 +38,28 @@ public partial class MainWindowViewModel : ObservableValidator
             var bytes = new byte[manifestResourceStream.Length];
             manifestResourceStream.ReadExactly(bytes, 0, bytes.Length);
             var s = Encoding.UTF8.GetString(bytes);
-            Console.WriteLine(s);
+            var lpSubKey = $$"""SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{{{s}}}_ModernInstaller""";
+            Console.WriteLine(lpSubKey);
             using (var openSubKey = Registry.LocalMachine.OpenSubKey(
-                       "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\",
-                       RegistryKeyPermissionCheck.ReadWriteSubTree))
+                       lpSubKey))
             {
                 if (openSubKey is null)
                 {
                     Console.WriteLine("openSubKey is null");
                 }
-                using (var registryKey = openSubKey.OpenSubKey($$"""{{{s}}}_ModernInstaller"""))
+                Console.WriteLine(openSubKey.ToString());
+             
+                AppName= openSubKey.GetValue("DisplayName").ToString();
+                MainFileFullPath=openSubKey.GetValue("Path").ToString()+"\\"+openSubKey.GetValue("MainFile").ToString();
+                Path=openSubKey.GetValue("Path").ToString();
+                
+            }
+            using (var openSubKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\"))
+            {
+                var subKeyNames = openSubKey.GetSubKeyNames();
+                foreach (var subKeyName in subKeyNames)
                 {
-                    if (registryKey is null)
-                    {
-                        Console.WriteLine("registryKey is null");
-                    }
-                    AppName= openSubKey.GetValue("DisplayName").ToString();
-                    MainFileFullPath=openSubKey.GetValue("Path").ToString()+"\\"+openSubKey.GetValue("MainFile").ToString();
-                    Path=openSubKey.GetValue("Path").ToString();
+                    Console.WriteLine(subKeyName);
                 }
             }
             
@@ -139,6 +145,6 @@ public partial class MainWindowViewModel : ObservableValidator
     [RelayCommand]
     private void Exit()
     {
-       Environment.Exit(0);
+        Environment.Exit(0);
     }
 }
