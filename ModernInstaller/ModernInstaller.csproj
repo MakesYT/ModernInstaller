@@ -1,0 +1,101 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework Condition="'$(Configuration)' != 'Debug'">net9.0-windows</TargetFramework>
+        <TargetFramework Condition="'$(Configuration)' == 'Debug'">net8.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <PublishAot>true</PublishAot>
+        <PublishAotSingleFile>true</PublishAotSingleFile>
+        <SupportedOSPlatformVersion>5.1</SupportedOSPlatformVersion>
+        <TargetPlatformMinVersion>5.1</TargetPlatformMinVersion>
+       
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+            
+    </PropertyGroup>
+    <ItemGroup>
+        <Folder Include="Natives\**"/>
+        <AvaloniaResource Include="Assets\HarmonyOS_Sans_SC_Regular.ttf"/>
+        <AvaloniaResource Include="Assets\Installer\**"/>
+        <Folder Include="native\x86\" />
+    </ItemGroup>
+    <ItemGroup Label="AotSingleFile" Condition="'$(RuntimeIdentifier)' == 'win-x64'">
+        <DirectPInvoke Include="libHarfBuzzSharp" />
+        <NativeLibrary Include="Natives/Windows-x64/libHarfBuzzSharp.lib" />
+
+        <DirectPInvoke Include="libSkiaSharp" />
+        <NativeLibrary Include="Natives/Windows-x64/libSkiaSharp.lib" />
+
+       
+
+        <Content Update="*.dll" CopyToPublishDirectory="Never" />
+    </ItemGroup>
+    <ItemGroup Label="AotSingleFile" Condition="'$(RuntimeIdentifier)' == 'win-x86'">
+        <DirectPInvoke Include="libHarfBuzzSharp" />
+        <NativeLibrary Include="Natives/Windows-x86/libHarfBuzzSharp.lib" />
+
+        <DirectPInvoke Include="libSkiaSharp" />
+        <NativeLibrary Include="Natives/Windows-x86/libSkiaSharp.lib" />
+
+      
+
+        <Content Update="*.dll" CopyToPublishDirectory="Never" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.2.0-beta1"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.0-beta1"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.0-beta1"/>
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.0-beta1"/>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.0" />
+        <PackageReference Include="Irihi.Ursa" Version="1.2.0" />
+        <PackageReference Include="Irihi.Ursa.Themes.Semi" Version="1.2.0" />
+        <PackageReference Include="Semi.Avalonia" Version="11.1.0.3" />
+        <PackageReference Include="Vanara.Windows.Shell" Version="4.0.3" />
+        <PackageReference Include="YY-Thunks" Version="1.1.2" />
+    </ItemGroup>
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Assets\Installer\Icon.png" />
+      <UpToDateCheckInput Remove="Assets\Installer\IconPack.png" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="..\Assets\App.zip">
+        <Link>Assets\App.zip</Link>
+      </EmbeddedResource>
+      <EmbeddedResource Include="..\Assets\info.json">
+        <Link>Assets\Installer\info.json</Link>
+      </EmbeddedResource>
+      <EmbeddedResource Include="..\Publish\ModernInstaller.Uninstaller.exe">
+        <Link>Assets\Installer\ModernInstaller.Uninstaller.exe</Link>
+      </EmbeddedResource>
+      <EmbeddedResource Include="..\Assets\ApplicationUUID">
+        <Link>Assets\ApplicationUUID</Link>
+      </EmbeddedResource>
+      <AvaloniaResource Include="..\Assets\Icon.png">
+        <Link>Assets\Installer\Icon.png</Link>
+      </AvaloniaResource>
+      <AvaloniaResource Include="..\Assets\IconPack.png">
+        <Link>Assets\Installer\IconPack.png</Link>
+      </AvaloniaResource>
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="..\Natives\Windows-x64\libHarfBuzzSharp.lib">
+        <Link>Natives\Windows-x64\libHarfBuzzSharp.lib</Link>
+      </Content>
+      <Content Include="..\Natives\Windows-x64\libSkiaSharp.lib">
+        <Link>Natives\Windows-x64\libSkiaSharp.lib</Link>
+      </Content>
+      <Content Include="..\Natives\Windows-x86\libHarfBuzzSharp.lib">
+        <Link>Natives\Windows-x86\libHarfBuzzSharp.lib</Link>
+      </Content>
+      <Content Include="..\Natives\Windows-x86\libSkiaSharp.lib">
+        <Link>Natives\Windows-x86\libSkiaSharp.lib</Link>
+      </Content>
+    </ItemGroup>
+
+  
+    
+</Project>

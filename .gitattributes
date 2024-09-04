@@ -1,0 +1,2 @@
+libSkiaSharp.lib filter=lfs diff=lfs merge=lfs -text
+libHarfBuzzSharp.lib filter=lfs diff=lfs merge=lfs -text
